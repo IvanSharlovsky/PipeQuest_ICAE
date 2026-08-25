@@ -40,6 +40,15 @@ namespace PipeQuest.Core
             onTimeUp = callback;
         }
 
+        // Allow switching which Text component displays the timer (used when panels change)
+        public void SetTimerText(Text text)
+        {
+            timerText = text;
+            // update immediately so UI shows current time
+            if (timerText != null)
+                timerText.text = Mathf.Ceil(currentTime).ToString();
+        }
+
         public void StopTimer() => isRunning = false;
     }
 }

@@ -1,4 +1,6 @@
+using PipeQuest.Core;
 using PipeQuest.Core.Enums;
+using PipeQuest.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +25,8 @@ namespace PipeQuest.UI
         [Header("Build UI")]
         [SerializeField] private Text stageTitle;
         [SerializeField] private Text attemptText;
+        [SerializeField] private Text scanTimerText;
+        [SerializeField] private Text buildTimerText;
         [SerializeField] private Button runWaterButton;
         [SerializeField] private Button hintButton;
         [SerializeField] private Button resetButton;
@@ -51,6 +55,16 @@ namespace PipeQuest.UI
             buildPanel?.SetActive(stage == GameStage.BuildHeatRemoval || stage == GameStage.BuildFirefighting);
             checkPanel?.SetActive(stage == GameStage.Check);
             resultPanel?.SetActive(stage == GameStage.Result);
+
+            // Обновляем ссылку на текст таймера
+            if (stage == GameStage.Scanning)
+                TimerManager.Instance.SetTimerText(scanPanel.GetComponentInChildren<Text>(true)); // найдет TimerText
+            else if (stage == GameStage.BuildHeatRemoval || stage == GameStage.BuildFirefighting)
+            {
+                Text buildTimer = buildPanel.transform.Find("TopBar/TimerText")?.GetComponent<Text>();
+                if (buildTimer != null)
+                    TimerManager.Instance.SetTimerText(buildTimer);
+            }
 
             if (stage == GameStage.BuildHeatRemoval)
                 stageTitle.text = "Теплоотвод: соедините море → АЭС";

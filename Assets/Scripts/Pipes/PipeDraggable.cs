@@ -65,13 +65,30 @@ namespace PipeQuest.Pipes
             if (canvas == null) return;
 
             Vector2 localPoint;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            // Choose camera based on canvas render mode. For Screen Space - Overlay use null.
+            Camera cam = canvas.renderMode == RenderMode.ScreenSpaceCamera ? canvas.worldCamera : null;
+
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 canvas.transform as RectTransform,
                 eventData.position,
-                canvas.worldCamera,
-                out localPoint);
-
-            rectTransform.anchoredPosition = localPoint;
+                cam,
+                out localPoint))
+            {
+                rectTransform.anchoredPosition = localPoint;
+            }
+            else
+            {
+                // Fallback: try world point to avoid lag on some canvas setups.
+                Vector3 worldPoint;
+                if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
+                    canvas.transform as RectTransform,
+                    eventData.position,
+                    cam,
+                    out worldPoint))
+                {
+                    rectTransform.position = worldPoint;
+                }
+            }
         }
 
         public void OnEndDrag(PointerEventData eventData)
