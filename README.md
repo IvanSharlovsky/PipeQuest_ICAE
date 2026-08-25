@@ -177,6 +177,7 @@
 
 ### 8.3. Архитектура (упрощённая)
 
+```text
 Scene: PipeQuest
 ├── Canvas
 │   ├── ScanPanel (этап 1)
@@ -198,6 +199,7 @@ Scene: PipeQuest
 │   ├── PipeValidator (BFS)
 │   └── TimerManager
 └── AudioManager
+```
 
 ### 8.4. Структура данных
 
